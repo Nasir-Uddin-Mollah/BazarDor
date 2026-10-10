@@ -10,7 +10,7 @@ const getUnitBn = (unit: string) => {
   if (unit === "kg") return "কেজি";
   if (unit === "litre") return "লিটার";
   if (unit === "dozen") return "ডজন";
-  if (unit === "piece") return "টি";
+  if (unit === "piece") return "পিস";
   return unit;
 };
 
