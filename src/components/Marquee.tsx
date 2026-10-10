@@ -2,11 +2,11 @@ import MarqueeText from "react-marquee-text";
 import "react-marquee-text/dist/styles.css";
 import { ProductType } from "@/Types/Product";
 
-const toBn = (num: number | string) => {
+export const toBn = (num: number | string) => {
   return num.toString().replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[+d]);
 };
 
-const getUnitBn = (unit: string) => {
+export const getUnitBn = (unit: string) => {
   if (unit === "kg") return "কেজি";
   if (unit === "litre") return "লিটার";
   if (unit === "dozen") return "ডজন";
