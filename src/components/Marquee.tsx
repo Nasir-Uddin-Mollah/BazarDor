@@ -1,6 +1,7 @@
 import MarqueeText from "react-marquee-text";
 import "react-marquee-text/dist/styles.css";
 import { ProductType } from "@/Types/Product";
+import getProducts from "@/services/productService";
 
 export const toBn = (num: number | string) => {
   return num.toString().replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[+d]);
@@ -14,22 +15,8 @@ export const getUnitBn = (unit: string) => {
   return unit;
 };
 
-const getProducts = async (): Promise<ProductType[]> => {
-  try {
-    const res = await fetch(
-      "https://openapi.programming-hero.com/api/bazardor/products",
-    );
-    if (!res.ok) throw new Error("Failed to fetch products");
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    return [];
-  }
-};
-
 const Marquee = async () => {
-  const products: ProductType[] = await getProducts();
+  const products = await getProducts();
 
   return (
     <div className="border-b border-gray-100 bg-white py-2.5 text-sm">

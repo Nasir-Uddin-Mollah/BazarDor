@@ -1,5 +1,7 @@
+import AllProducts from "@/components/AllProducts";
 import Banner from "@/components/Banner";
 import Marquee from "@/components/Marquee";
+import TodayPriceDecreasedProducts from "@/components/TodayPriceDecreasedProducts";
 import TodayPriceIncreasedProducts from "@/components/TodayPriceIncreasedProducts";
 
 export default function Home() {
@@ -7,7 +9,9 @@ export default function Home() {
     <main className="flex-1">
       <Marquee />
       <Banner />
-      <TodayPriceIncreasedProducts/>
+      <TodayPriceIncreasedProducts />
+      <TodayPriceDecreasedProducts />
+      <AllProducts />
     </main>
   );
 }

@@ -1,22 +1,10 @@
 import { ProductType } from "@/Types/Product";
 import ProductCard from "./ProductCard";
+import getProducts from "@/services/productService";
 
-const getPriceIncreasedProducts = async (): Promise<ProductType[]> => {
-  try {
-    const res = await fetch(
-      "https://openapi.programming-hero.com/api/bazardor/products",
-    );
-    if (!res.ok) throw new Error("Failed to fetch products");
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    return [];
-  }
-};
+const TodayPriceIncreasedProducts = async() => {
+  const products = await getProducts();
 
-const TodayPriceIncreasedProducts = async () => {
-  const products = await getPriceIncreasedProducts();
   const filteredProducts = products
     .filter((product: ProductType) => product.change.dir === "up")
     .sort((a: ProductType, b: ProductType) => b.change.pct - a.change.pct)
