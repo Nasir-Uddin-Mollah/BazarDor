@@ -9,7 +9,7 @@ export const date = new Date().toLocaleDateString("bn-BD", {
 
 const Navbar = () => {
   return (
-    <header className="sticky w-full border-b border-gray-100 bg-white">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white">
       <nav className="mx-auto flex min-h-[68px] max-w-6xl items-center justify-between gap-2 px-3 py-2 sm:h-[68px] sm:px-4 sm:py-0 border-b border-gray-100">
         <Link href="/" className="flex min-w-0 items-center gap-2">
           <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-700">
