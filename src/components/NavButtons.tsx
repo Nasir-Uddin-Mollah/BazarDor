@@ -9,16 +9,20 @@ const NavButtons = () => {
   const { data: session, isPending } = useSession();
   const router = useRouter();
 
-  const handleSignOut = async()=>{
+  if (isPending) {
+    return null;
+  }
+
+  const handleSignOut = async () => {
     await signOut({
-      fetchOptions:{
-        onSuccess: ()=>{
+      fetchOptions: {
+        onSuccess: () => {
           toast.success("সফলভাবে সাইন আউট হয়েছে।");
           router.push("/sign-in");
-        }
-      }
-    })
-  }
+        },
+      },
+    });
+  };
 
   return (
     <>
@@ -57,7 +61,10 @@ const NavButtons = () => {
                 textValue="আমার প্রোফাইল"
                 className="flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm text-gray-800 transition-colors hover:bg-gray-100 cursor-pointer outline-none"
               >
-                <Link href="/profile" className="flex w-full items-center gap-2.5">
+                <Link
+                  href="/profile"
+                  className="flex w-full items-center gap-2.5"
+                >
                   <FaUser className="size-3.5 text-gray-800 shrink-0" />
                   <Label className="cursor-pointer text-sm font-medium text-gray-800">
                     আমার প্রোফাইল
@@ -74,7 +81,6 @@ const NavButtons = () => {
               >
                 <button
                   type="button"
-                  onClick={handleSignOut}
                   className="flex w-full items-center gap-2.5 border-0 bg-transparent p-0 text-left outline-none cursor-pointer"
                 >
                   <span className="text-sm font-bold text-rose-500 shrink-0 leading-none">
