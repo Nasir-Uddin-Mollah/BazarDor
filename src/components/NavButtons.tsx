@@ -1,6 +1,7 @@
 "use client";
 import { signOut, useSession } from "@/lib/auth-client";
-import { Button, Dropdown, Label, toast } from "@heroui/react";
+import { Button, Dropdown, Label } from "@heroui/react";
+import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaCaretDown, FaUser } from "react-icons/fa";

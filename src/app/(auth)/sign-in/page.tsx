@@ -10,8 +10,8 @@ import {
   Input,
   Label,
   TextField,
-  toast,
 } from "@heroui/react";
+import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaGithub } from "react-icons/fa";
@@ -31,7 +31,7 @@ const SignInPage = () => {
     });
 
     if (error) {
-      toast.danger("ইমেইল অথবা পাসওয়ার্ড সঠিক নয়। আবার চেষ্টা করুন।");
+      toast.error("ইমেইল অথবা পাসওয়ার্ড সঠিক নয়। আবার চেষ্টা করুন।");
       return;
     }
 

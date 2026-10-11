@@ -1,5 +1,5 @@
 import { signIn } from "@/lib/auth-client";
-import { toast } from "@heroui/react";
+import { toast } from "react-toastify";
 
 export const handleSocialSignIn = async (provider: "google" | "github") => {
   try {
@@ -8,6 +8,6 @@ export const handleSocialSignIn = async (provider: "google" | "github") => {
       callbackURL: "/profile",
     });
   } catch (error) {
-    toast.danger("সোশ্যাল লগইনে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+    toast.error("সোশ্যাল লগইনে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
   }
 };

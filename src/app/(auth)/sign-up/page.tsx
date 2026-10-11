@@ -10,8 +10,8 @@ import {
   Input,
   Label,
   TextField,
-  toast,
 } from "@heroui/react";
+import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -34,7 +34,7 @@ const SignUpPage = () => {
     });
 
     if (error) {
-      toast.danger(error.message || "ফর্মের তথ্য ঠিক করে আবার চেষ্টা করুন।");
+      toast.error(error.message || "ফর্মের তথ্য ঠিক করে আবার চেষ্টা করুন।");
       return;
     }
 

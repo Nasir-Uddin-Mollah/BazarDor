@@ -1,7 +1,7 @@
 "use client";
 import { signOut, updateUser, useSession } from "@/lib/auth-client";
-import { toast } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import React from "react";
 import { FaUser } from "react-icons/fa";
 import { IoReturnDownBackOutline } from "react-icons/io5";
@@ -37,7 +37,7 @@ const ProfilePage = () => {
       name: data.name as string,
     })
     if(error){
-      toast.danger("প্রোফাইল আপডেট হয়নি।");
+      toast.error("প্রোফাইল আপডেট হয়নি।");
       return;
     }
     if(updatedUser){
