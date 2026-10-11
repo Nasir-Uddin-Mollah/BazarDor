@@ -1,5 +1,6 @@
 "use client";
 import { signIn } from "@/lib/auth-client";
+import { handleSocialSignIn } from "@/services/authService";
 import {
   Button,
   FieldError,
@@ -120,6 +121,7 @@ const SignInPage = () => {
                 <Button
                   type="button"
                   variant="outline"
+                  onClick={() => handleSocialSignIn("google")}
                   className="flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-[#E1E8E1] bg-white px-2 text-xs font-medium text-gray-700 shadow-none transition-colors hover:bg-gray-50 cursor-pointer"
                 >
                   <FcGoogle className="size-4 shrink-0 text-base" />
@@ -128,6 +130,7 @@ const SignInPage = () => {
                 <Button
                   type="button"
                   variant="outline"
+                  onClick={() => handleSocialSignIn("github")}
                   className="flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-[#E1E8E1] bg-white px-2 text-xs font-medium text-gray-700 shadow-none transition-colors hover:bg-gray-50 cursor-pointer"
                 >
                   <FaGithub className="size-4 shrink-0 text-base text-gray-800" />
