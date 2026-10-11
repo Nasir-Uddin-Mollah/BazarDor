@@ -40,7 +40,7 @@ const SignUpPage = () => {
 
     if (user) {
       toast.success("অ্যাকাউন্ট তৈরি হয়েছে।");
-      router.push("/");
+      router.push("/profile");
     }
   };
 
