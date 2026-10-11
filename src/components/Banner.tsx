@@ -6,7 +6,7 @@ const Banner = () => {
   return (
     <section className="w-full py-4 sm:py-5 lg:py-6">
       <div className="mx-auto max-w-6xl px-3 sm:px-4">
-        <div className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-[#E1E8E1] bg-white px-6 py-6 sm:px-8 sm:py-7 md:flex-row md:gap-8 lg:px-12 lg:py-8">
+        <div className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-[#E1E8E1] bg-[#FAFCFA] px-6 py-6 sm:px-8 sm:py-7 md:flex-row md:gap-8 lg:px-12 lg:py-8">
           <div className="flex flex-1 flex-col items-start text-left">
             <span
               suppressHydrationWarning

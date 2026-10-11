@@ -7,7 +7,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
   const pct = Number(Math.abs(product.change?.pct ?? 0)).toFixed(1);
 
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-[#E1E8E1] bg-white p-4 transition-colors hover:border-emerald-600 sm:p-5">
+    <div className="flex flex-col justify-between rounded-2xl border border-[#E1E8E1] bg-[#FAFCFA] p-4 transition-colors hover:border-emerald-600 sm:p-5">
       <div className="flex items-center gap-3">
         <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#F0F5F0] text-2xl select-none sm:size-12">
           {product.image}

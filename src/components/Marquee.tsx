@@ -19,7 +19,7 @@ const Marquee = async () => {
   const products = await getProducts();
 
   return (
-    <div className="border-b border-gray-100 bg-white py-2.5 text-sm">
+    <div className="border-b border-gray-100 bg-[#FAFCFA] py-2.5 text-sm">
       <MarqueeText direction="right" duration={8} pauseOnHover={true}>
         {products.map((product: ProductType) => (
           <span

@@ -37,7 +37,7 @@ const AllProductsClient = ({ products }: AllProductsClientProps) => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="appearance-none cursor-pointer rounded-lg border border-[#E1E8E1] bg-white py-2 pl-3 pr-8 text-xs font-medium text-gray-800 transition-colors hover:border-zinc-400 focus:border-zinc-500 focus:outline-none sm:text-sm"
+                  className="appearance-none cursor-pointer rounded-lg border border-[#E1E8E1] bg-[#FAFCFA] py-2 pl-3 pr-8 text-xs font-medium text-gray-800 transition-colors hover:border-zinc-400 focus:border-zinc-500 focus:outline-none sm:text-sm"
                 >
                   <option value="default">ডিফল্ট</option>
                   <option value="low-to-high">দামঃ কম থেকে বেশি</option>
