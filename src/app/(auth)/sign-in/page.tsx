@@ -1,5 +1,5 @@
 "use client";
-import { signIn } from "@/lib/auth-client";
+import { signIn, useSession } from "@/lib/auth-client";
 import { handleSocialSignIn } from "@/services/authService";
 import {
   Button,
@@ -14,13 +14,20 @@ import {
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SocialButtons from "@/components/SocialButtons";
 
 const SignInPage = () => {
   const router = useRouter();
+  const { data: session, isPending } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [socialLoading, setSocialLoading] = useState<"google" | "github" | null>(null);
+
+  useEffect(() => {
+    if (!isPending && session) {
+      router.replace("/");
+    }
+  }, [isPending, session, router]);
 
   const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,7 +49,8 @@ const SignInPage = () => {
 
       if (user) {
         toast.success("সফলভাবে সাইন ইন হয়েছে।");
-        router.push("/");
+        router.replace("/");
+        router.refresh();
       }
     } catch {
       toast.error("সাইন ইন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
@@ -61,6 +69,10 @@ const SignInPage = () => {
   };
 
   const isAnyLoading = isSubmitting || socialLoading !== null;
+
+  if (session) {
+    return null;
+  }
 
   return (
     <div className="flex min-h-[calc(100vh-140px)] flex-col items-center justify-center px-4 py-8 sm:py-12">

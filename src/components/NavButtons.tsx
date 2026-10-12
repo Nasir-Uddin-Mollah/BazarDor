@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { signOut, useSession } from "@/lib/auth-client";
 import { Button, Dropdown, Label } from "@heroui/react";
 import { toast } from "react-toastify";
@@ -9,20 +10,32 @@ import { FaCaretDown, FaUser } from "react-icons/fa";
 const NavButtons = () => {
   const { data: session, isPending } = useSession();
   const router = useRouter();
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   if (isPending) {
     return null;
   }
 
   const handleSignOut = async () => {
-    await signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/");
-          toast.success("সফলভাবে সাইন আউট হয়েছে।");
+    setIsSigningOut(true);
+    try {
+      await signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            router.replace("/");
+            router.refresh();
+            toast.success("সফলভাবে সাইন আউট হয়েছে।");
+          },
+          onError: () => {
+            setIsSigningOut(false);
+            toast.error("সাইন আউট করতে সমস্যা হয়েছে।");
+          },
         },
-      },
-    });
+      });
+    } catch {
+      setIsSigningOut(false);
+      toast.error("সাইন আউট করতে সমস্যা হয়েছে।");
+    }
   };
 
   return (
@@ -32,15 +45,25 @@ const NavButtons = () => {
           <Button
             aria-label="User Menu"
             variant="ghost"
+            isDisabled={isSigningOut}
             className="flex h-9 items-center gap-2 rounded-xl bg-[#E5ECE5] px-2.5 py-1.5 transition-colors hover:bg-[#dce3dc] border-0 outline-none shadow-none cursor-pointer sm:h-10"
           >
-            <div className="flex size-6 items-center justify-center rounded-full bg-emerald-700 text-xs font-semibold text-white sm:size-7">
-              {session.user.name?.[0]?.toLowerCase() || "u"}
-            </div>
-            <span className="text-xs font-medium text-gray-800 sm:text-sm">
-              {session.user.name || "User"}
-            </span>
-            <FaCaretDown className="size-2.5 text-gray-600" />
+            {isSigningOut ? (
+              <span className="flex items-center gap-1.5 text-xs text-gray-600 sm:text-sm">
+                <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-700 border-t-transparent" />
+                <span>সাইন আউট হচ্ছে...</span>
+              </span>
+            ) : (
+              <>
+                <div className="flex size-6 items-center justify-center rounded-full bg-emerald-700 text-xs font-semibold text-white sm:size-7">
+                  {session.user.name?.[0]?.toLowerCase() || "u"}
+                </div>
+                <span className="text-xs font-medium text-gray-800 sm:text-sm">
+                  {session.user.name || "User"}
+                </span>
+                <FaCaretDown className="size-2.5 text-gray-600" />
+              </>
+            )}
           </Button>
 
           <Dropdown.Popover
@@ -85,13 +108,18 @@ const NavButtons = () => {
               >
                 <button
                   type="button"
+                  disabled={isSigningOut}
                   className="flex w-full items-center gap-2.5 border-0 bg-transparent p-0 text-left outline-none cursor-pointer"
                 >
-                  <span className="text-sm font-bold text-rose-500 shrink-0 leading-none">
-                    ↩
-                  </span>
+                  {isSigningOut ? (
+                    <span className="size-3.5 animate-spin rounded-full border-2 border-rose-500 border-t-transparent shrink-0" />
+                  ) : (
+                    <span className="text-sm font-bold text-rose-500 shrink-0 leading-none">
+                      ↩
+                    </span>
+                  )}
                   <Label className="cursor-pointer text-sm font-medium text-rose-500">
-                    সাইন আউট
+                    {isSigningOut ? "অপেক্ষা করুন..." : "সাইন আউট"}
                   </Label>
                 </button>
               </Dropdown.Item>

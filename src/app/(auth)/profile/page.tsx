@@ -3,7 +3,7 @@ import { signOut, updateUser, useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoReturnDownBackOutline } from "react-icons/io5";
 import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton";
@@ -13,16 +13,34 @@ const ProfilePage = () => {
   const { data: session, isPending } = useSession();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.replace("/sign-in");
+    }
+  }, [isPending, session, router]);
 
   const handleSignOut = async () => {
-    await signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          toast.success("সফলভাবে সাইন আউট হয়েছে।");
-          router.push("/");
+    setIsSigningOut(true);
+    try {
+      await signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            toast.success("সফলভাবে সাইন আউট হয়েছে।");
+            router.replace("/");
+            router.refresh();
+          },
+          onError: () => {
+            setIsSigningOut(false);
+            toast.error("সাইন আউট করতে সমস্যা হয়েছে।");
+          },
         },
-      },
-    });
+      });
+    } catch {
+      setIsSigningOut(false);
+      toast.error("সাইন আউট করতে সমস্যা হয়েছে।");
+    }
   };
 
   const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -49,7 +67,7 @@ const ProfilePage = () => {
     }
   };
 
-  if (isPending) {
+  if (isPending || !session) {
     return <ProfileSkeleton />;
   }
 
@@ -66,7 +84,7 @@ const ProfilePage = () => {
 
       <div className="flex flex-col gap-4 rounded-2xl border border-[#E1E8E1] bg-[#FAFCFA] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div className="flex items-center gap-4">
-          {session?.user?.image ? (
+          {session.user.image ? (
             <Image
               src={session.user.image}
               alt={session.user.name || "Avatar"}
@@ -76,27 +94,38 @@ const ProfilePage = () => {
             />
           ) : (
             <div className="flex size-16 items-center justify-center rounded-2xl bg-emerald-700 text-xl font-bold text-white">
-              {session?.user?.name?.[0]?.toUpperCase() || (
+              {session.user.name?.[0]?.toUpperCase() || (
                 <FaUser className="size-6 text-white" />
               )}
             </div>
           )}
           <div>
             <h2 className="text-lg font-bold text-gray-900 sm:text-xl">
-              {session?.user?.name}
+              {session.user.name}
             </h2>
             <p className="text-xs text-gray-500 sm:text-sm">
-              {session?.user?.email}
+              {session.user.email}
             </p>
           </div>
         </div>
 
         <button
+          type="button"
           onClick={handleSignOut}
-          className="inline-flex items-center justify-center gap-1.5 self-start rounded-xl border border-rose-300 bg-white px-4 py-2 text-xs font-semibold text-rose-500 transition-colors hover:bg-rose-50 cursor-pointer sm:self-center sm:text-sm"
+          disabled={isSigningOut}
+          className="inline-flex items-center justify-center gap-1.5 self-start rounded-xl border border-rose-300 bg-white px-4 py-2 text-xs font-semibold text-rose-500 transition-colors hover:bg-rose-50 cursor-pointer disabled:cursor-not-allowed disabled:opacity-70 sm:self-center sm:text-sm"
         >
-          <IoReturnDownBackOutline className="size-4 shrink-0 text-rose-500" />
-          <span>সাইন আউট</span>
+          {isSigningOut ? (
+            <>
+              <span className="size-3.5 animate-spin rounded-full border-2 border-rose-500 border-t-transparent" />
+              <span>সাইন আউট হচ্ছে...</span>
+            </>
+          ) : (
+            <>
+              <IoReturnDownBackOutline className="size-4 shrink-0 text-rose-500" />
+              <span>সাইন আউট</span>
+            </>
+          )}
         </button>
       </div>
 
