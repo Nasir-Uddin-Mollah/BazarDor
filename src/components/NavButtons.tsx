@@ -18,7 +18,7 @@ const NavButtons = () => {
     await signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/sign-in");
+          router.push("/");
           toast.success("সফলভাবে সাইন আউট হয়েছে।");
         },
       },

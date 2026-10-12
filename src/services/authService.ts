@@ -5,7 +5,7 @@ export const handleSocialSignIn = async (provider: "google" | "github") => {
   try {
     await signIn.social({
       provider,
-      callbackURL: "/profile",
+      callbackURL: "/",
     });
   } catch (error) {
     toast.error("সোশ্যাল লগইনে সমস্যা হয়েছে। আবার চেষ্টা করুন।");

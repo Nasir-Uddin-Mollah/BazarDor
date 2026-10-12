@@ -3,7 +3,7 @@ import { signOut, updateUser, useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import React from "react";
+import React, { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoReturnDownBackOutline } from "react-icons/io5";
 import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton";
@@ -12,13 +12,14 @@ import { Button, Form, Input, Label, TextField } from "@heroui/react";
 const ProfilePage = () => {
   const { data: session, isPending } = useSession();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSignOut = async () => {
     await signOut({
       fetchOptions: {
         onSuccess: () => {
           toast.success("সফলভাবে সাইন আউট হয়েছে।");
-          router.push("/sign-in");
+          router.push("/");
         },
       },
     });
@@ -26,18 +27,25 @@ const ProfilePage = () => {
 
   const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    const { data: updatedUser, error } = await updateUser({
-      name: data.name as string,
-    });
-    if (error) {
-      toast.error("প্রোফাইল আপডেট হয়নি।");
-      return;
-    }
-    if (updatedUser) {
-      toast.success("প্রোফাইল সফলভাবে আপডেট হয়েছে।");
+    try {
+      const { data: updatedUser, error } = await updateUser({
+        name: data.name as string,
+      });
+      if (error) {
+        toast.error("প্রোফাইল আপডেট হয়নি।");
+        return;
+      }
+      if (updatedUser) {
+        toast.success("প্রোফাইল সফলভাবে আপডেট হয়েছে।");
+      }
+    } catch {
+      toast.error("প্রোফাইল আপডেট করতে সমস্যা হয়েছে।");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -98,6 +106,7 @@ const ProfilePage = () => {
           <TextField
             key={session?.user?.name || "name"}
             name="name"
+            aria-label="নাম"
             defaultValue={session?.user?.name || ""}
             className="flex w-full flex-col gap-1.5 [&_.label]:after:!hidden"
           >
@@ -106,15 +115,28 @@ const ProfilePage = () => {
             </Label>
             <Input
               name="name"
+              aria-label="নাম"
               placeholder="আপনার নাম"
               className="h-11 w-full rounded-xl border border-[#E1E8E1] bg-white px-3.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
             />
           </TextField>
           <Button
             type="submit"
-            className="mt-2 h-11 w-full rounded-xl bg-emerald-700 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-800 cursor-pointer"
+            isDisabled={isSubmitting}
+            className={`mt-2 h-11 w-full rounded-xl text-sm font-semibold transition-colors ${
+              isSubmitting
+                ? "bg-[#E5ECE5] text-gray-500 cursor-not-allowed shadow-none"
+                : "bg-emerald-700 text-white shadow-sm hover:bg-emerald-800 cursor-pointer"
+            }`}
           >
-            আপডেট
+            {isSubmitting ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="size-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+                <span>অপেক্ষা করুন...</span>
+              </span>
+            ) : (
+              "আপডেট"
+            )}
           </Button>
         </Form>
       </div>

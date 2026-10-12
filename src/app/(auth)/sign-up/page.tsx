@@ -15,34 +15,54 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { FaGithub } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import SocialButtons from "@/components/SocialButtons";
 
 const SignUpPage = () => {
   const router = useRouter();
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [socialLoading, setSocialLoading] = useState<"google" | "github" | null>(null);
 
   const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    const { data: user, error } = await signUp.email({
-      name: data.name as string,
-      email: data.email as string,
-      password: data.password as string,
-    });
+    try {
+      const { data: user, error } = await signUp.email({
+        name: data.name as string,
+        email: data.email as string,
+        password: data.password as string,
+      });
 
-    if (error) {
-      toast.error(error.message || "ফর্মের তথ্য ঠিক করে আবার চেষ্টা করুন।");
-      return;
-    }
+      if (error) {
+        toast.error(error.message || "ফর্মের তথ্য ঠিক করে আবার চেষ্টা করুন।");
+        setIsSubmitting(false);
+        return;
+      }
 
-    if (user) {
-      router.push("/");
-      toast.success("অ্যাকাউন্ট তৈরি হয়েছে।");
+      if (user) {
+        toast.success("অ্যাকাউন্ট তৈরি হয়েছে।");
+        router.push("/");
+      }
+    } catch {
+      toast.error("অ্যাকাউন্ট তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
+  const onSocialClick = async (provider: "google" | "github") => {
+    setSocialLoading(provider);
+    try {
+      await handleSocialSignIn(provider);
+    } catch {
+      setSocialLoading(null);
+    }
+  };
+
+  const isAnyLoading = isSubmitting || socialLoading !== null;
 
   return (
     <div className="flex min-h-[calc(100vh-140px)] flex-col items-center justify-center px-4 py-8 sm:py-12">
@@ -62,6 +82,7 @@ const SignUpPage = () => {
               <TextField
                 isRequired
                 name="name"
+                aria-label="নাম"
                 className="flex flex-col gap-1.5"
                 validate={(value) => {
                   if (value.length < 3) {
@@ -74,6 +95,7 @@ const SignUpPage = () => {
                   নাম
                 </Label>
                 <Input
+                  aria-label="নাম"
                   placeholder="যেমন: রহিম উদ্দিন"
                   className="h-11 w-full rounded-xl border border-[#E1E8E1] bg-white px-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none"
                 />
@@ -84,12 +106,14 @@ const SignUpPage = () => {
                 isRequired
                 name="email"
                 type="email"
+                aria-label="ইমেইল"
                 className="flex flex-col gap-1.5"
               >
                 <Label className="text-xs font-semibold text-gray-800 sm:text-sm">
                   ইমেইল
                 </Label>
                 <Input
+                  aria-label="ইমেইল"
                   placeholder="you@example.com"
                   className="h-11 w-full rounded-xl border border-[#E1E8E1] bg-white px-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none"
                 />
@@ -101,6 +125,7 @@ const SignUpPage = () => {
                 minLength={8}
                 name="password"
                 type="password"
+                aria-label="পাসওয়ার্ড"
                 value={password}
                 onChange={setPassword}
                 className="flex flex-col gap-1.5"
@@ -121,6 +146,7 @@ const SignUpPage = () => {
                   পাসওয়ার্ড
                 </Label>
                 <Input
+                  aria-label="পাসওয়ার্ড"
                   placeholder="কমপক্ষে ৮ অক্ষর"
                   className="h-11 w-full rounded-xl border border-[#E1E8E1] bg-white px-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none"
                 />
@@ -132,6 +158,7 @@ const SignUpPage = () => {
                 minLength={8}
                 name="confirm_password"
                 type="password"
+                aria-label="পাসওয়ার্ড নিশ্চিত করুন"
                 className="flex flex-col gap-1.5"
                 validate={(value) => {
                   if (value !== password) {
@@ -144,6 +171,7 @@ const SignUpPage = () => {
                   পাসওয়ার্ড নিশ্চিত করুন
                 </Label>
                 <Input
+                  aria-label="পাসওয়ার্ড নিশ্চিত করুন"
                   placeholder="আবার লিখুন"
                   className="h-11 w-full rounded-xl border border-[#E1E8E1] bg-white px-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none"
                 />
@@ -154,37 +182,28 @@ const SignUpPage = () => {
             <Fieldset.Actions className="mt-5 flex w-full flex-col gap-0 items-stretch">
               <Button
                 type="submit"
-                className="h-11 w-full rounded-xl bg-emerald-700 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(13,122,62,0.25)] transition-colors hover:bg-emerald-800 cursor-pointer"
+                isDisabled={isAnyLoading}
+                className={`h-11 w-full rounded-xl text-sm font-semibold transition-colors ${
+                  isAnyLoading
+                    ? "bg-[#E5ECE5] text-gray-500 cursor-not-allowed shadow-none"
+                    : "bg-emerald-700 text-white shadow-[0_4px_14px_rgba(13,122,62,0.25)] hover:bg-emerald-800 cursor-pointer"
+                }`}
               >
-                অ্যাকাউন্ট তৈরি করুন
+                {isAnyLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="size-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+                    <span>অপেক্ষা করুন...</span>
+                  </span>
+                ) : (
+                  "অ্যাকাউন্ট তৈরি করুন"
+                )}
               </Button>
 
-              <div className="my-5 flex w-full items-center gap-3">
-                <div className="h-px flex-1 bg-[#E1E8E1]" />
-                <span className="text-xs font-normal text-gray-500">অথবা</span>
-                <div className="h-px flex-1 bg-[#E1E8E1]" />
-              </div>
-
-              <div className="grid w-full grid-cols-2 gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => handleSocialSignIn("google")}
-                  className="flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-[#E1E8E1] bg-white px-2 text-xs font-medium text-gray-700 shadow-none transition-colors hover:bg-gray-50 cursor-pointer"
-                >
-                  <FcGoogle className="size-4 shrink-0 text-base" />
-                  <span className="truncate">Google দিয়ে চালিয়ে যান</span>
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => handleSocialSignIn("github")}
-                  className="flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-[#E1E8E1] bg-white px-2 text-xs font-medium text-gray-700 shadow-none transition-colors hover:bg-gray-50 cursor-pointer"
-                >
-                  <FaGithub className="size-4 shrink-0 text-base text-gray-800" />
-                  <span className="truncate">GitHub দিয়ে চালিয়ে যান</span>
-                </Button>
-              </div>
+              <SocialButtons
+                isSubmitting={isSubmitting}
+                socialLoading={socialLoading}
+                onSocialClick={onSocialClick}
+              />
 
               <div className="mt-6 text-center text-xs text-gray-600 sm:text-sm">
                 অ্যাকাউন্ট আছে?{" "}
