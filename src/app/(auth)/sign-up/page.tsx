@@ -39,8 +39,8 @@ const SignUpPage = () => {
     }
 
     if (user) {
+      router.push("/");
       toast.success("অ্যাকাউন্ট তৈরি হয়েছে।");
-      router.push("/profile");
     }
   };
 

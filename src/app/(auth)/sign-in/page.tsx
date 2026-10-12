@@ -36,8 +36,8 @@ const SignInPage = () => {
     }
 
     if (user) {
+      router.push("/");
       toast.success("সফলভাবে সাইন ইন হয়েছে।");
-      router.push("/profile");
     }
   };
 
