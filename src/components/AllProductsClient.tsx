@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { ProductType } from "@/Types/Product";
 import ProductCard from "./ProductCard";
 import { toBn } from "./Marquee";
@@ -7,24 +7,29 @@ import { LuChevronDown } from "react-icons/lu";
 
 interface AllProductsClientProps {
   products: ProductType[];
+  title?: string;
 }
 
-const AllProductsClient = ({ products }: AllProductsClientProps) => {
+const AllProductsClient = ({ products, title }: AllProductsClientProps) => {
   const [sortBy, setSortBy] = useState<string>("default");
 
-  const sortedProducts = [...products].sort((a:ProductType, b:ProductType) => {
-    if (sortBy === "low-to-high") return a.today - b.today;
-    if (sortBy === "high-to-low") return b.today - a.today;
-    return 0;
-  });
+  const sortedProducts = [...products].sort(
+    (a: ProductType, b: ProductType) => {
+      if (sortBy === "low-to-high") return a.today - b.today;
+      if (sortBy === "high-to-low") return b.today - a.today;
+      return 0;
+    },
+  );
 
   return (
     <section className="w-full pb-8 sm:pb-10">
       <div className="mx-auto max-w-6xl px-3 sm:px-4">
         <div className="mb-6">
-          <h2 className="flex items-center gap-2 text-lg font-bold text-gray-800 sm:text-xl">
-            সব পণ্য
-          </h2>
+          {title && (
+            <h2 className="flex items-center gap-2 text-lg font-bold text-gray-800 sm:text-xl">
+              {title}
+            </h2>
+          )}
           <div className="mt-1 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <p className="text-sm text-gray-500">
               মোট {toBn(products.length)}টি পণ্য দেখানো হচ্ছে

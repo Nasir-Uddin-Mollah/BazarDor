@@ -26,7 +26,7 @@ const Categories = async () => {
           {categories.map((category: CategoryType) => (
             <li key={category?.id} className="shrink-0">
               <Link
-                href={`/${category?.slug || category?.id}`}
+                href={`/category/${category?.slug}`}
                 className="group flex items-center gap-1 text-sm font-semibold text-gray-800 transition-colors hover:text-emerald-700 sm:gap-2 sm:text-[15px]"
               >
                 <span className="text-base select-none transition-transform duration-150 group-hover:scale-110 sm:text-lg">
