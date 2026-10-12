@@ -26,7 +26,7 @@ A modern, high-performance, and responsive market price tracking web application
 - Detailed market breakdown comparing prices across major Dhaka markets (Kawran Bazar, Mirpur-1, New Market, Mohammadpur Krishi Market, etc.) with highest and lowest price indicators.
 
 ### 4. 🛡️ Secure User Authentication & Profile Management
-- Powered by **Better Auth** and **MongoDB** supporting secure email/password signup, sign-in, and one-click Google social authentication.
+- Powered by **Better Auth** and **MongoDB** supporting secure email/password signup, sign-in, and one-click Google & GitHub social authentication.
 - Persistent session handling with dynamic navbar states (displaying user avatar/name initials and logout) and profile management to update personal information.
 
 ### 5. 🎨 Modern Next.js 16 Architecture with Flicker-Free Skeleton Loaders & Custom 404
@@ -71,9 +71,11 @@ BETTER_AUTH_SECRET=your_auth_secret_key
 BETTER_AUTH_URL=http://localhost:3000
 MONGODB_URI=your_mongodb_connection_string
 
-# Google OAuth (Optional)
+# Social OAuth Providers (Google & GitHub)
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
 ```
 
 ### 4. Run the development server
