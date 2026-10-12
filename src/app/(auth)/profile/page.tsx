@@ -1,6 +1,7 @@
 "use client";
 import { signOut, updateUser, useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { toast } from "react-toastify";
 import React from "react";
 import { FaUser } from "react-icons/fa";
@@ -60,9 +61,11 @@ const ProfilePage = () => {
       <div className="flex flex-col gap-4 rounded-2xl border border-[#E1E8E1] bg-[#FAFCFA] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div className="flex items-center gap-4">
           {session?.user?.image ? (
-            <img
+            <Image
               src={session.user.image}
               alt={session.user.name || "Avatar"}
+              width={64}
+              height={64}
               className="size-16 rounded-2xl border border-[#E1E8E1] object-cover"
             />
           ) : (
