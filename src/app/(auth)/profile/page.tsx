@@ -6,16 +6,11 @@ import { toast } from "react-toastify";
 import React from "react";
 import { FaUser } from "react-icons/fa";
 import { IoReturnDownBackOutline } from "react-icons/io5";
-import {
-  Button,
-  Form,
-  Input,
-  Label,
-  TextField,
-} from "@heroui/react";
+import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton";
+import { Button, Form, Input, Label, TextField } from "@heroui/react";
 
 const ProfilePage = () => {
-  const { data: session } = useSession();
+  const { data: session, isPending } = useSession();
   const router = useRouter();
 
   const handleSignOut = async () => {
@@ -29,23 +24,26 @@ const ProfilePage = () => {
     });
   };
 
-  const onSubmit = async(e: React.SyntheticEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    const {data: updatedUser, error} = await updateUser({
+    const { data: updatedUser, error } = await updateUser({
       name: data.name as string,
-    })
-    if(error){
+    });
+    if (error) {
       toast.error("প্রোফাইল আপডেট হয়নি।");
       return;
     }
-    if(updatedUser){
+    if (updatedUser) {
       toast.success("প্রোফাইল সফলভাবে আপডেট হয়েছে।");
     }
-
   };
+
+  if (isPending) {
+    return <ProfileSkeleton />;
+  }
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8 sm:py-12">
@@ -77,10 +75,10 @@ const ProfilePage = () => {
           )}
           <div>
             <h2 className="text-lg font-bold text-gray-900 sm:text-xl">
-              {session?.user?.name || "ব্যবহারকারী"}
+              {session?.user?.name}
             </h2>
             <p className="text-xs text-gray-500 sm:text-sm">
-              {session?.user?.email || "ইমেইল পাওয়া যায়নি"}
+              {session?.user?.email}
             </p>
           </div>
         </div>
