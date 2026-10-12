@@ -22,7 +22,7 @@ const AllProductsClient = ({ products, title }: AllProductsClientProps) => {
   );
 
   return (
-    <section className="w-full pb-8 sm:pb-10">
+    <section id="সব-পণ্য" className="w-full pb-8 sm:pb-10 scroll-mt-32">
       <div className="mx-auto max-w-6xl px-3 sm:px-4">
         <div className="mb-6">
           {title && (

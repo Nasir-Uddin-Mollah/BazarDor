@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Custom horizontal scrollbar for categories */
 .categories-scroll {
   scrollbar-width: thin;
