@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { CategoryType } from "@/Types/Category";
 import CategoryNav from "./CategoryNav";
-import Marquee from "@/components/Marquee";
 
 const getCategories = async (): Promise<CategoryType[]> => {
   try {
@@ -44,7 +43,6 @@ const Categories = async () => {
           </Suspense>
         </div>
       </div>
-      <Marquee />
     </div>
   );
 };
