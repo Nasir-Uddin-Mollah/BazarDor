@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import { ProductType, Market } from "@/Types/Product";
 import { toBn, getUnitBn } from "@/components/Marquee";
 
@@ -23,7 +22,7 @@ const getProduct = async (slug: number) => {
   }
 };
 
-const ProductDetailContent = async ({ params }: ProductDetailPageProps) => {
+const ProductDetailPage = async ({ params }: ProductDetailPageProps) => {
   const { slug } = await params;
   const product = await getProduct(slug);
 
@@ -254,20 +253,5 @@ const ProductDetailContent = async ({ params }: ProductDetailPageProps) => {
   );
 };
 
-const ProductDetailPage = ({ params }: ProductDetailPageProps) => {
-  return (
-    <Suspense
-      fallback={
-        <main className="w-full flex-1 py-4 sm:py-6">
-          <div className="mx-auto max-w-6xl px-3 py-16 text-center text-gray-500 sm:px-4">
-            লোড হচ্ছে...
-          </div>
-        </main>
-      }
-    >
-      <ProductDetailContent params={params} />
-    </Suspense>
-  );
-};
-
 export default ProductDetailPage;
+

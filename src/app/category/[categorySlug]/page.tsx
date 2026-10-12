@@ -1,7 +1,6 @@
 import AllProductsClient from "@/components/AllProductsClient";
 import { toBn } from "@/components/Marquee";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 
 interface CategoryPageProps {
   params: Promise<{ categorySlug: string }>;
@@ -37,7 +36,7 @@ const getProductsByCategory = async (categorySlug: string) => {
   }
 };
 
-const CategoryContent = async ({ params }: CategoryPageProps) => {
+const ProductsByCategory = async ({ params }: CategoryPageProps) => {
   const { categorySlug } = await params;
   const product = await getCategory(categorySlug);
   const products = await getProductsByCategory(categorySlug);
@@ -65,18 +64,6 @@ const CategoryContent = async ({ params }: CategoryPageProps) => {
       </div>
       <AllProductsClient products={products} />
     </div>
-  );
-};
-
-const ProductsByCategory = async ({ params }: CategoryPageProps) => {
-  return (
-    <Suspense
-      fallback={
-        <div className="py-12 text-center text-gray-500">লোড হচ্ছে...</div>
-      }
-    >
-      <CategoryContent params={params} />
-    </Suspense>
   );
 };
 
