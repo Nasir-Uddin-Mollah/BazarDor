@@ -4,6 +4,7 @@ import ProductCard from "./ProductCard";
 import { toBn } from "./Marquee";
 import { useState } from "react";
 import { LuChevronDown } from "react-icons/lu";
+import NotFoundPage from "@/app/not-found";
 
 interface AllProductsClientProps {
   products: ProductType[];
@@ -56,11 +57,15 @@ const AllProductsClient = ({ products, title }: AllProductsClientProps) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 md:gap-5">
-          {sortedProducts.map((product: ProductType) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {sortedProducts.length === 0 ? (
+          <NotFoundPage />
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 md:gap-5">
+            {sortedProducts.map((product: ProductType) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

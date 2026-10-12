@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ProductType, Market } from "@/Types/Product";
 import { toBn, getUnitBn } from "@/components/Marquee";
@@ -27,18 +28,7 @@ const ProductDetailContent = async ({ params }: ProductDetailPageProps) => {
   const product = await getProduct(slug);
 
   if (!product) {
-    return (
-      <div className="mx-auto max-w-6xl px-3 py-16 text-center sm:px-4">
-        <p className="text-4xl mb-3">🔍</p>
-        <h2 className="text-xl font-bold text-gray-800">পণ্যটি পাওয়া যায়নি</h2>
-        <Link
-          href="/"
-          className="mt-4 inline-block text-sm font-semibold text-emerald-700 hover:underline"
-        >
-          হোমপেজে ফিরে যান
-        </Link>
-      </div>
-    );
+    notFound();
   }
 
   const isUp = product.change?.dir === "up";

@@ -1,5 +1,6 @@
 import AllProductsClient from "@/components/AllProductsClient";
 import { toBn } from "@/components/Marquee";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 interface CategoryPageProps {
@@ -17,7 +18,7 @@ const getCategory = async (categorySlug: string) => {
     return data;
   } catch (error) {
     console.error("Error fetching product:", error);
-    return {};
+    return null;
   }
 };
 
@@ -40,6 +41,10 @@ const CategoryContent = async ({ params }: CategoryPageProps) => {
   const { categorySlug } = await params;
   const product = await getCategory(categorySlug);
   const products = await getProductsByCategory(categorySlug);
+
+  if (!product || !products || products.length === 0) {
+    notFound();
+  }
 
   return (
     <div className="py-6">
