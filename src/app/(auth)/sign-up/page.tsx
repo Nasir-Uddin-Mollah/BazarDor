@@ -1,5 +1,5 @@
 "use client";
-import { signUp, useSession } from "@/lib/auth-client";
+import { signUp } from "@/lib/auth-client";
 import { handleSocialSignIn } from "@/services/authService";
 import {
   Button,
@@ -14,21 +14,14 @@ import {
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SocialButtons from "@/components/SocialButtons";
 
 const SignUpPage = () => {
   const router = useRouter();
-  const { data: session, isPending } = useSession();
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [socialLoading, setSocialLoading] = useState<"google" | "github" | null>(null);
-
-  useEffect(() => {
-    if (!isPending && session) {
-      router.replace("/");
-    }
-  }, [isPending, session, router]);
 
   const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,8 +44,7 @@ const SignUpPage = () => {
 
       if (user) {
         toast.success("অ্যাকাউন্ট তৈরি হয়েছে।");
-        router.replace("/");
-        router.refresh();
+        router.push("/");
       }
     } catch {
       toast.error("অ্যাকাউন্ট তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
@@ -71,10 +63,6 @@ const SignUpPage = () => {
   };
 
   const isAnyLoading = isSubmitting || socialLoading !== null;
-
-  if (session) {
-    return null;
-  }
 
   return (
     <div className="flex min-h-[calc(100vh-140px)] flex-col items-center justify-center px-4 py-8 sm:py-12">
