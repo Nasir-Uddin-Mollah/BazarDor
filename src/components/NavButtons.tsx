@@ -56,7 +56,10 @@ const NavButtons = () => {
               </p>
             </div>
 
-            <Dropdown.Menu className="flex flex-col gap-1 p-0 outline-none">
+            <Dropdown.Menu
+              aria-label="ব্যবহারকারীর অ্যাকাউন্ট অপশন"
+              className="flex flex-col gap-1 p-0 outline-none"
+            >
               <Dropdown.Item
                 id="profile"
                 textValue="আমার প্রোফাইল"

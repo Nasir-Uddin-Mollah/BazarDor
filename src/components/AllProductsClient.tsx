@@ -41,6 +41,7 @@ const AllProductsClient = ({ products, title }: AllProductsClientProps) => {
               </span>
               <div className="relative inline-block">
                 <select
+                  aria-label="পণ্য সাজান"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   className="appearance-none cursor-pointer rounded-lg border border-[#E1E8E1] bg-[#FAFCFA] py-2 pl-3 pr-8 text-xs font-medium text-gray-800 transition-colors hover:border-zinc-400 focus:border-zinc-500 focus:outline-none sm:text-sm"

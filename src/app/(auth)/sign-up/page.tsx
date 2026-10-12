@@ -57,7 +57,7 @@ const SignUpPage = () => {
 
       <div className="w-full max-w-[420px] rounded-3xl border border-[#E1E8E1] bg-[#FAFCFA] p-6 shadow-xs sm:p-8">
         <Form className="w-full" onSubmit={onSubmit}>
-          <Fieldset className="w-full">
+          <Fieldset aria-label="সাইন আপ তথ্য" className="w-full">
             <FieldGroup className="flex w-full flex-col gap-4 [&_.label]:after:!hidden [&_.label]:after:!content-none">
               <TextField
                 isRequired
