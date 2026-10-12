@@ -7,7 +7,14 @@ export async function proxy(request: NextRequest) {
     headers: await headers(),
   });
 
-  if (!session) {
+  const { pathname } = request.nextUrl;
+  const authRoutes = ["/sign-in", "/sign-up"];
+
+  if (session && authRoutes.includes(pathname)) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  if (!session && !authRoutes.includes(pathname)) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
@@ -15,5 +22,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/profile", "/product/:path*"],
+  matcher: ["/profile", "/product/:path*", "/sign-in", "/sign-up"],
 };
